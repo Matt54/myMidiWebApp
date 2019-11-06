@@ -24,6 +24,7 @@ else
 	{
 		echo "p is set\n";
 		$val = $_GET["p"];
+		echo $val;
 		$numArgs = 1;
 	}
 }
