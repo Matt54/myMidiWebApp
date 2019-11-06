@@ -15,24 +15,24 @@ $pVal = getopt("p:");
 if ($pVal !== false) 
 {
 	$pNumArgs = count($pVal);
-	if($pNumArgs > 0) $input = $pVal['p'];
+	if($pNumArgs > 0) $pInput = $pVal['p'];
 }
 $lVal = getopt("l:");
 if ($lVal !== false) 
 {
 	$lNumArgs = count($lVal);
-	if($lNumArgs > 0) $input = $lVal['l'];
+	if($lNumArgs > 0) $lInput = $lVal['l'];
 }
 
 //Get value from web browser if present
 if(isset($_GET["p"])) 
 {
-	$input = $_GET["p"];
+	$pInput = $_GET["p"];
 	$pNumArgs = 1;
 }
 if(isset($_GET["l"])) 
 {
-	$input = $_GET["l"];
+	$lInput = $_GET["l"];
 	$lNumArgs = 1;
 }
 
@@ -48,12 +48,12 @@ if($hasArguments)
 		
 		$isBinary = false;
 
-		if ( preg_match('~^[01]+$~', $input) ) 
+		if ( preg_match('~^[01]+$~', $pInput) ) 
 		{
 		    $isBinary = true;
 		}
 
-		$decimalValue = bindec($input);
+		$decimalValue = bindec($pInput);
 
 		//create sql statement based on input type
 		if($isBinary)
@@ -62,25 +62,26 @@ if($hasArguments)
 			{
 				$sql = "SELECT statusFunction
 						FROM mididb.statusbytes
-						WHERE binaryValue = '{$input}'";
+						WHERE binaryValue = '{$pInput}'";
 			}
 			else
 			{
 				$sql = "SELECT controlFunction
 						FROM mididb.controlandmodechanges
-						WHERE binaryValue = '{$input}'";
+						WHERE binaryValue = '{$pInput}'";
 			}
 		}
 		else
 		{
 			$sql = "SELECT binaryValue
 					FROM mididb.controlandmodechanges
-					WHERE controlFunction = '{$input}'";
+					WHERE controlFunction = '{$pInput}'";
 		}
+		runQuery($con, $sql);
 	}
 	if($lNumArgs > 0)
 	{
-		switch($input)
+		switch($lInput)
 		{
 			// list all synth models with their respective manufacturer
 			case "m":
@@ -105,8 +106,17 @@ if($hasArguments)
 							   byte3binaryvalue FROM mididb.ManufacturerSysExID";
 				break;
 		}
+		runQuery($con, $sql);
 	}
+	
+}
+else
+{
+	echo "No input provided.\n";
+}
 
+function runQuery($con, $sql)
+{
 	// Check if there are results
 	if ( $result = mysqli_query($con, $sql) )
 	{
@@ -126,10 +136,6 @@ if($hasArguments)
 	 // Finally, encode the array to JSON and output the results
 	 echo json_encode($resultArray);
 	}
-}
-else
-{
-	echo "No input provided.\n";
 }
  
 // Close connections
