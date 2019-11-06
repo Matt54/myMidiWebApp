@@ -11,7 +11,7 @@ $numArgs = 0; //Will store the number of input arguments
 //Get input arguements
 // $val['p'] = input value
 
-/*
+
 $val = getopt("p:");
 if ($val !== false) 
 {
@@ -21,15 +21,16 @@ else
 {
 	echo "Could not get value of command line option\n";
 }
-*/
 
-$numArgs = 1;
-$input = "10001000";
+
+//This worked
+//$numArgs = 1;
+//$input = "10001000";
 
 //If we have input arguements, then lets run a query
 if($numArgs > 0)
 {
-	//$input = $val['p'];
+	$input = $val['p'];
 	$isBinary = false;
 
 	if ( preg_match('~^[01]+$~', $input) ) 
