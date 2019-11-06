@@ -37,7 +37,8 @@ else
 //If we have input arguements, then lets run a query
 if($numArgs > 0)
 {
-	$input = $val['p'];
+	//$input = $val['p'];
+	$input = $val;
 	$isBinary = false;
 
 	if ( preg_match('~^[01]+$~', $input) ) 
