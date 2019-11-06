@@ -98,6 +98,12 @@ if($hasArguments)
 			case "cc":
 				$sql = "SELECT controlFunction , binaryValue FROM mididb.controlandmodechanges";
 				break;
+			case "e":
+				$sql = "SELECT manufacturername,
+							   byte1binaryvalue,
+							   byte2binaryvalue, 
+							   byte3binaryvalue FROM mididb.ManufacturerSysExID";
+				break;
 		}
 	}
 
