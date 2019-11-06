@@ -1,63 +1,104 @@
 <?php
 
-// allegedly can be ran on a browser as: "script.php?p=00100100"
+// can be run on browser as: https://mymidiwebapp.azurewebsites.net/index.php?p=00010000
 // can be run on the command line as: C:\Users\matthewp\Sync\Code - Programming\PHP> php jsonTest.php -p00100100 or php jsonTest.php -p'Bank Select'
 
 //Include database setup file
 include 'AzureConnect.php';
 
-$numArgs = 0; //Will store the number of input arguments
+$hasArguments = false;
+$pNumArgs = 0; //Will store the number of input p arguments
+$lNumArgs = 0; //Will store the number of input l arguments
 
 //Get value from command line if present
-$val = getopt("p:");
-if ($val !== false) 
+$pVal = getopt("p:");
+if ($pVal !== false) 
 {
-	$numArgs = count($val);
-	if($numArgs > 0) $input = $val['p'];
+	$pNumArgs = count($pVal);
+	if($pNumArgs > 0) $input = $pVal['p'];
+}
+$lVal = getopt("l:");
+if ($lVal !== false) 
+{
+	$lNumArgs = count($lVal);
+	if($lNumArgs > 0) $input = $lVal['l'];
 }
 
 //Get value from web browser if present
 if(isset($_GET["p"])) 
 {
-	$val = $_GET["p"];
-	$numArgs = 1;
-	$input = $val;
+	$input = $_GET["p"];
+	$pNumArgs = 1;
+}
+if(isset($_GET["l"])) 
+{
+	$input = $_GET["l"];
+	$lNumArgs = 1;
 }
 
+//Flag if we got any arguements
+if($pNumArgs + $lNumArgs > 0) $hasArguments = true;
+
 //If we have input arguements, then lets run a query
-if($numArgs > 0)
+if($hasArguments)
 {
-	
-	$isBinary = false;
-
-	if ( preg_match('~^[01]+$~', $input) ) 
+	$sql="";
+	if($pNumArgs > 0)
 	{
-	    $isBinary = true;
-	}
+		
+		$isBinary = false;
 
-	$decimalValue = bindec($input);
-
-	//create sql statement based on input type
-	if($isBinary)
-	{
-		if($decimalValue > 127)
+		if ( preg_match('~^[01]+$~', $input) ) 
 		{
-			$sql = "SELECT statusFunction
-					FROM mididb.statusbytes
-					WHERE binaryValue = '{$input}'";
+		    $isBinary = true;
+		}
+
+		$decimalValue = bindec($input);
+
+		//create sql statement based on input type
+		if($isBinary)
+		{
+			if($decimalValue > 127)
+			{
+				$sql = "SELECT statusFunction
+						FROM mididb.statusbytes
+						WHERE binaryValue = '{$input}'";
+			}
+			else
+			{
+				$sql = "SELECT controlFunction
+						FROM mididb.controlandmodechanges
+						WHERE binaryValue = '{$input}'";
+			}
 		}
 		else
 		{
-			$sql = "SELECT controlFunction
+			$sql = "SELECT binaryValue
 					FROM mididb.controlandmodechanges
-					WHERE binaryValue = '{$input}'";
+					WHERE controlFunction = '{$input}'";
 		}
 	}
-	else
+	if($lNumArgs > 0)
 	{
-		$sql = "SELECT binaryValue
-				FROM mididb.controlandmodechanges
-				WHERE controlFunction = '{$input}'";
+		switch($input)
+		{
+			// list all synth models with their respective manufacturer
+			case "m":
+				$sql = "SELECT synths.synthname, manufacturerid.name
+					FROM mididb.synths, mididb.manufacturerid
+					WHERE synths.manufacturerid = manufacturerid.id";
+				break;
+
+			// list all status bytes
+			case "s":
+				$sql = "SELECT statusFunction , binaryValue FROM mididb.statusbytes";
+				break;
+
+			// list all control and mode change bytes
+			case "cc":
+				$sql = "SELECT controlFunction , binaryValue FROM mididb.controlandmodechanges";
+				break;
+		}
 	}
 
 	// Check if there are results
