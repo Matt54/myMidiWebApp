@@ -19,8 +19,13 @@ if ($val !== false)
 }
 else 
 {
-	echo "Could not get value of command line option\n";
-	if(isset($_GET["p"])) echo "p is set\n";
+	//echo "Could not get value of command line option\n";
+	if(isset($_GET["p"])) 
+	{
+		echo "p is set\n";
+		$val = $_GET["p"];
+		$numArgs = 1;
+	}
 }
 
 
