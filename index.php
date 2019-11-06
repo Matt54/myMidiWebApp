@@ -20,6 +20,7 @@ if ($val !== false)
 else 
 {
 	echo "Could not get value of command line option\n";
+	if(isset($_GET["p"])) echo "p is set\n";
 }
 
 
