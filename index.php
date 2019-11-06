@@ -8,37 +8,26 @@ include 'AzureConnect.php';
 
 $numArgs = 0; //Will store the number of input arguments
 
-//Get input arguements
-// $val['p'] = input value
-
-
+//Get value from command line if present
 $val = getopt("p:");
 if ($val !== false) 
 {
 	$numArgs = count($val);
+	if($numArgs > 0) $input = $val['p'];
 }
-else 
+
+//Get value from web browser if present
+if(isset($_GET["p"])) 
 {
-	//echo "Could not get value of command line option\n";
-	if(isset($_GET["p"])) 
-	{
-		echo "p is set\n";
-		$val = $_GET["p"];
-		echo $val;
-		$numArgs = 1;
-	}
+	$val = $_GET["p"];
+	$numArgs = 1;
+	$input = $val;
 }
-
-
-//This worked
-//$numArgs = 1;
-//$input = "10001000";
 
 //If we have input arguements, then lets run a query
 if($numArgs > 0)
 {
-	//$input = $val['p'];
-	$input = $val;
+	
 	$isBinary = false;
 
 	if ( preg_match('~^[01]+$~', $input) ) 
