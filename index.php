@@ -1,5 +1,5 @@
 <?php
-
+header("Access-Control-Allow-Origin: *");
 // can be run on browser as: https://mymidiwebapp.azurewebsites.net/index.php?p=00010000
 // can be run on the command line as: C:\Users\matthewp\Sync\Code - Programming\PHP> php jsonTest.php -p00100100 or php jsonTest.php -p'Bank Select'
 
