@@ -93,12 +93,12 @@ if($hasArguments)
 
 			// list all status bytes
 			case "s":
-				$sql = "SELECT statusFunction , binaryValue FROM mididb.statusbytes";
+				$sql = "SELECT * FROM mididb.statusbytes";
 				break;
 
 			// list all control and mode change bytes
 			case "cc":
-				$sql = "SELECT controlFunction , binaryValue FROM mididb.controlandmodechanges";
+				$sql = "SELECT * FROM mididb.controlandmodechanges";
 				break;
 			case "e":
 				$sql = "SELECT manufacturername,
