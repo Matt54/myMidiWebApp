@@ -134,7 +134,7 @@ function runQuery($con, $sql)
 	 }
 	 
 	 // Finally, encode the array to JSON and output the results
-	 echo json_encode($resultArray);
+	 echo json_encode($resultArray, JSON_PRETTY_PRINT);
 	}
 }
  
