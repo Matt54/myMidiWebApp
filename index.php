@@ -8,8 +8,8 @@ header('Content-Type: application/json; charset=utf-8');
 include 'AzureConnect.php';
 
 $hasArguments = false;
-$bNumArgs = 0; //Will store the number of input p arguments
-$lNumArgs = 0; //Will store the number of input l arguments
+$bNumArgs = 0; //Will store the number of input binary arguments
+$lNumArgs = 0; //Will store the number of input list arguments
 
 //Get value from command line if present
 $bVal = getopt("b:");
