@@ -8,15 +8,15 @@ header('Content-Type: application/json; charset=utf-8');
 include 'AzureConnect.php';
 
 $hasArguments = false;
-$pNumArgs = 0; //Will store the number of input p arguments
+$bNumArgs = 0; //Will store the number of input p arguments
 $lNumArgs = 0; //Will store the number of input l arguments
 
 //Get value from command line if present
-$pVal = getopt("p:");
-if ($pVal !== false) 
+$bVal = getopt("b:");
+if ($bVal !== false) 
 {
-	$pNumArgs = count($pVal);
-	if($pNumArgs > 0) $pInput = $pVal['p'];
+	$bNumArgs = count($bVal);
+	if($bNumArgs > 0) $bInput = $bVal['b'];
 }
 $lVal = getopt("l:");
 if ($lVal !== false) 
@@ -26,10 +26,10 @@ if ($lVal !== false)
 }
 
 //Get value from web browser if present
-if(isset($_GET["p"])) 
+if(isset($_GET["b"])) 
 {
-	$pInput = $_GET["p"];
-	$pNumArgs = 1;
+	$bInput = $_GET["b"];
+	$bNumArgs = 1;
 }
 if(isset($_GET["l"])) 
 {
@@ -38,23 +38,23 @@ if(isset($_GET["l"]))
 }
 
 //Flag if we got any arguements
-if($pNumArgs + $lNumArgs > 0) $hasArguments = true;
+if($bNumArgs + $lNumArgs > 0) $hasArguments = true;
 
 //If we have input arguements, then lets run a query
 if($hasArguments)
 {
 	$sql="";
-	if($pNumArgs > 0)
+	if($bNumArgs > 0)
 	{
 		
 		$isBinary = false;
 
-		if ( preg_match('~^[01]+$~', $pInput) ) 
+		if ( preg_match('~^[01]+$~', $bInput) ) 
 		{
 		    $isBinary = true;
 		}
 
-		$decimalValue = bindec($pInput);
+		$decimalValue = bindec($bInput);
 
 		//create sql statement based on input type
 		if($isBinary)
@@ -63,20 +63,20 @@ if($hasArguments)
 			{
 				$sql = "SELECT statusFunction
 						FROM mididb.statusbytes
-						WHERE binaryValue = '{$pInput}'";
+						WHERE binaryValue = '{$bInput}'";
 			}
 			else
 			{
 				$sql = "SELECT controlFunction
 						FROM mididb.controlandmodechanges
-						WHERE binaryValue = '{$pInput}'";
+						WHERE binaryValue = '{$bInput}'";
 			}
 		}
 		else
 		{
 			$sql = "SELECT binaryValue
 					FROM mididb.controlandmodechanges
-					WHERE controlFunction = '{$pInput}'";
+					WHERE controlFunction = '{$bInput}'";
 		}
 		runQuery($con, $sql);
 	}
