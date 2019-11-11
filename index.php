@@ -92,13 +92,16 @@ if($hasArguments)
 				break;
 
 			// list all status bytes
-			case "s":
+			case "StatusBytes":
 				$sql = "SELECT * FROM mididb.statusbytes";
 				break;
 
 			// list all control and mode change bytes
-			case "cc":
+			case "ControlAndModeChanges":
 				$sql = "SELECT * FROM mididb.controlandmodechanges";
+				break;
+			case "NordStage3":
+				$sql = "SELECT * FROM mididb.nordstage3";
 				break;
 			case "e":
 				$sql = "SELECT manufacturername,
