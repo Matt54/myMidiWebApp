@@ -102,9 +102,7 @@ if($hasArguments)
 				break;
 
 			case "SynthTableNames"
-				$sql = "SELECT synths.synthTableName 
-						FROM mididb.synths
-						WHERE synths.synthTableName IS NOT NULL";
+				$sql = "SELECT synthTableName FROM mididb.synths WHERE synthTableName IS NOT NULL";
 				break;
 			case "NordStage3":
 				$sql = "SELECT * FROM mididb.nordstage3";
