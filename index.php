@@ -100,6 +100,11 @@ if($hasArguments)
 			case "ControlAndModeChanges":
 				$sql = "SELECT * FROM mididb.controlandmodechanges";
 				break;
+
+			case "SynthTableNames"
+				$sql = "SELECT synthTableName FROM synths
+						WHERE synths.synthTableName IS NOT NULL";
+				break;
 			case "NordStage3":
 				$sql = "SELECT * FROM mididb.nordstage3";
 				break;
